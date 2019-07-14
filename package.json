@@ -1,6 +1,6 @@
 {
   "name": "wepy-image-cropper",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "\"Wepy 图片裁剪工具\"",
   "main": "wepy-image-cropper.wpy",
   "scripts": {
