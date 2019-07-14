@@ -1,0 +1,17 @@
+{
+  "name": "wepy-image-cropper",
+  "version": "1.0.0",
+  "description": "\"Wepy 图片裁剪工具\"",
+  "main": "wepy-image-cropper.wpy",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:foolstack-omg/wepy-image-cropper.git"
+  },
+  "author": "foolstack-omg",
+  "license": "MIT",
+  "devDependencies": {
+  }
+}
