@@ -5,7 +5,7 @@
 此插件基于image-cropper微信原生插件开发, 可能会增加部分功能，具体请查阅以下的插件文档
 
 原生插件传送门：
-[微信原生插件 image-cropper 地址](https://github.com/foolstack-omg/image-cropper)
+[微信原生插件 image-cropper 地址](https://github.com/wx-plugin/image-cropper)
 
 ## 一款高性能的小程序图片裁剪插件，支持旋转、设置尺寸
 ###### `1.功能强大，请看下面demo。`
