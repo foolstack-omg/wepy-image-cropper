@@ -7,6 +7,9 @@
 原生插件传送门：
 [微信原生插件 image-cropper 地址](https://github.com/wx-plugin/image-cropper)
 
+使用到该插件的案例：
+[同游分账小程序](https://github.com/foolstack-omg/bill-split-weapp)
+
 ## 一款高性能的小程序图片裁剪插件，支持旋转、设置尺寸
 ###### `1.功能强大，请看下面demo。`
 ###### `2.性能超高超流畅，大图毫无卡顿感。`
@@ -27,7 +30,13 @@ npm install wepy-image-cropper --save
 ### 引入组件
 ```javascript
 <template>
-  <wepy-image-cropper id="image-cropper" :limit_move="limit_move" :disable_rotate="disable_rotate" :borderColor="borderColor" :width="width" :height="height" :imgSrc.sync="src" @load.user="cropperload" @imageload.user="loadimage" @tapcut.user="clickcut"></wepy-image-cropper>
+  <view wx:if="{{show_cropper}}" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: black;">
+      <wepy-image-cropper id="image-cropper" :limit_move="limit_move" :disable_rotate="disable_rotate" :disable_ratio="disable_ratio" :borderColor="borderColor" :width="width" :height="height" @load.user="cropperload" @imageload.user="loadimage"></wepy-image-cropper>
+      <view style="height: 100rpx; box-shadow:0px -2rpx 0px 0px white; display: flex; flex-direction: row; align-items: center; justify-content: space-around; position: absolute; width: 100%; bottom: 0; z-index: 9999;">
+        <view @tap="hide_cropper" style="font-size: 36rpx; color: white;">取消</view>
+        <view @tap="finish_cut" style="font-size: 36rpx; color: white;">完成</view>
+      </view>
+    </view>
 </template>
 
 <script>
@@ -44,13 +53,16 @@ npm install wepy-image-cropper --save
 
     mixins = []
 
+	cropper = null 
     data = {
-      src: '',
-      width: 350,//宽度
-      height: 350,//高度
-      limit_move: true,
-      disable_rotate: true,
-      borderColor: 'skyblue',
+     	src: '',
+	    width: 250,//宽度
+	    height: 250,//高度
+	    limit_move: true,
+	    disable_rotate: true,
+	    borderColor: 'white',
+	    disable_ratio: true,
+	    show_cropper: true,
     }
     onLoad(options) {
     }
@@ -66,22 +78,60 @@ npm install wepy-image-cropper --save
     }
 
     methods = {
-      cropperload(e) {
-        console.log("cropper初始化完成:" + e);
-      },
-      loadimage(e){
-        console.log("图片加载完成",e);
-
-      },
-      clickcut(e) {
-        console.log(e);
-        //点击裁剪框阅览图片
-        wx.previewImage({
-          current: e.url, // 当前显示图片的http链接
-          urls: [e.url] // 需要预览的图片http链接列表
-        })
-      }
-    }
+          cropperload(e) {
+            console.log("cropper初始化完成:" + e);
+            this.cropper = e.cropper
+            this.cropper.$wxpage.imgReset()
+            this.$apply()
+          },
+          loadimage(e){
+            console.log("图片加载完成",e);
+          },
+          // 上传收款码
+          upload(type) {
+            let that = this
+            this.type = type
+            this.cropper.$wxpage.setWidth(this.width)
+            this.cropper.$wxpage.setHeight(this.height)
+            this.cropper.$wxpage.imgReset()
+            this.cropper.$wxpage.setCutCenter();
+    
+            wx.chooseImage({
+              count: 1,
+              sizeType: ['original', 'compressed'],
+              sourceType: ['album', 'camera'],
+              success: function success(res) {
+                var tempFilePaths = res.tempFilePaths[0];
+                that.cropper.$wxpage.pushImg(tempFilePaths);
+                that.show_cropper = true;
+                that.$apply();
+                wx.showLoading({
+                  title: '加载中...'
+                });
+              }
+            });
+          },
+          async finish_cut() {
+            this.cropper.$wxpage.getImg(async (e) => {
+              try {
+                // 获取选择的图片
+                let image = e.url
+    
+               	
+              } catch (err) {
+                console.log(err)
+                wepy.showModal({
+                  title: '提示',
+                  content: '服务器错误，请联系管理员'
+                })
+              }
+    
+              this.show_cropper = false
+              this.$apply()
+            })
+          },
+        
+        }
 
     events = {
     }
@@ -131,6 +181,8 @@ npm install wepy-image-cropper --save
 | setAngle      |  deg   	   |   无    |设置图片旋转角度（带过渡效果）|是|
 | setTransform  |{x,y,angle,scale,cutX,cutY}|   无    |图片在原有基础上的变化(scale受min_scale、max_scale影响)|根据需要传参|
 | imgReset      |无	          |   无    |重置图片的角度、缩放、位置(可以在onloadImage回调里使用)|否|
+| setWidth      | width	          |   无    | 设置图片宽度 |否|
+| setHeight      | height	          |   无    | 设置图片高度 |否|
 
 [![996.icu](https://img.shields.io/badge/link-996.icu-red.svg)](https://996.icu)
 [![LICENSE](https://img.shields.io/badge/license-Anti%20996-blue.svg)](https://github.com/996icu/996.ICU/blob/master/LICENSE)

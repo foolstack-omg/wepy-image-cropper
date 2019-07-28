@@ -402,7 +402,6 @@
         this._canvasDetectionPosition()
       },
       imgSrc() {
-        console.log('setting img src')
         this.pushImg()
       },
       cut_top() {
@@ -419,8 +418,6 @@
       }
     }
     onLoad() {
-      console.log('fucker')
-
       this.info = wx.getSystemInfoSync()
 
       this.INIT_IMGWIDTH = this.img_width
@@ -429,7 +426,6 @@
       this._canvas_width = this.width
 
       this._initCanvas()
-      console.log('img Src' + this.imgSrc)
       this.imgSrc && (this.imgSrc = this.imgSrc)
       // 根据开发者设置的图片目标尺寸计算实际尺寸
       this._initImageSize()
@@ -883,13 +879,11 @@
      * 加载（更换）图片
      */
     pushImg(src) {
-      console.log('pushing img: ' + src)
       if (src) {
         this.imgSrc = src
         // 发现是手动赋值直接返回，交给watch处理
         return
       }
-
       wx.getImageInfo({
         src: this.imgSrc,
         success: (res) => {
@@ -933,9 +927,7 @@
     }
     _initCanvas() {
       // 初始化canvas
-      if (!this.ctx) {
-        this.ctx = wx.createCanvasContext('image-cropper', this)
-      }
+      this.ctx = wx.createCanvasContext('image-cropper', this)
     }
     /**
      * 根据开发者设置的图片目标尺寸计算实际尺寸
