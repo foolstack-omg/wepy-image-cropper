@@ -1074,7 +1074,7 @@
     // 改变截取框大小
     _computeCutSize() {
       if (this.width > this.info.windowWidth) {
-        this.width = his.info.windowWidth
+        this.width = this.info.windowWidth
       } else if (this.width + this.cut_left > this.info.windowWidth) {
         this.cut_left = this.info.windowWidth - this.cut_left
       }
